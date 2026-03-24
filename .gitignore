@@ -26,3 +26,6 @@ lambda/**/*.zip
 # OS
 .DS_Store
 Thumbs.db
+
+# Lambda zip files
+lambda/**/*.zip
