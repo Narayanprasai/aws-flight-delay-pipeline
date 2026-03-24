@@ -1,0 +1,28 @@
+﻿# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Environment
+.env
+.env.*
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/.user.yml
+
+# Lambda zips
+lambda/**/*.zip
+
+# OS
+.DS_Store
+Thumbs.db
