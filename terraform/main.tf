@@ -12,11 +12,9 @@ terraform {
     bucket  = "flight-pipeline-tfstate-013849273657"
     key     = "terraform.tfstate"
     region  = "ap-northeast-1"
-    profile = "personal"
   }
 }
 
 provider "aws" {
   region  = var.aws_region
-  profile = var.aws_profile
 }
