@@ -48,7 +48,7 @@ resource "aws_lambda_function" "bts_downloader" {
   handler          = "handler.handler"
   runtime          = "python3.12"
   timeout          = 300
-  memory_size      = 512
+  memory_size      = 1024
   source_code_hash = data.archive_file.bts_downloader.output_base64sha256
 
   environment {

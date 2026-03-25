@@ -1,6 +1,8 @@
+import io
 import json
 import logging
 import os
+import zipfile
 from datetime import datetime, timedelta
 
 import boto3
@@ -28,23 +30,42 @@ def build_bts_url(year, month):
     return f"{BTS_BASE_URL}/{filename}", filename
 
 
-def download_and_upload(url, filename, year, month):
+def download_extract_upload(url, filename, year, month):
     logger.info(f"Downloading BTS data from {url}")
 
-    response = requests.get(url, timeout=300, stream=True)
+    response = requests.get(url, timeout=300)
     response.raise_for_status()
 
-    s3_key = f"flights/year={year}/month={month:02d}/{filename}"
+    logger.info(f"Downloaded {len(response.content)} bytes — extracting CSV")
+
+    zip_buffer = io.BytesIO(response.content)
+
+    with zipfile.ZipFile(zip_buffer) as zf:
+        csv_files = [f for f in zf.namelist() if f.endswith(".csv")]
+        logger.info(f"Found CSV files: {csv_files}")
+
+        if not csv_files:
+            raise ValueError(f"No CSV files in ZIP: {zf.namelist()}")
+
+        csv_filename = csv_files[0]
+
+        with zf.open(csv_filename) as csv_file:
+            csv_content = csv_file.read()
+
+        logger.info(f"Extracted {len(csv_content)} bytes")
+
+    s3_key = f"flights/year={year}/month={month:02d}/{csv_filename}"
 
     s3_client = boto3.client("s3")
+
     s3_client.put_object(
         Bucket=S3_BUCKET,
         Key=s3_key,
-        Body=response.content,
-        ContentType="application/zip",
+        Body=csv_content,
+        ContentType="text/csv",
     )
 
-    logger.info(f"Successfully uploaded to s3://{S3_BUCKET}/{s3_key}")
+    logger.info(f"Uploaded to s3://{S3_BUCKET}/{s3_key}")
     return s3_key
 
 
@@ -62,12 +83,12 @@ def handler(event, context):
             logger.info(f"Auto trigger for previous month: {year}-{month:02d}")
 
         url, filename = build_bts_url(year, month)
-        s3_key = download_and_upload(url, filename, year, month)
+        s3_key = download_extract_upload(url, filename, year, month)
 
         return {
             "statusCode": 200,
             "body": json.dumps({
-                "message": "BTS data downloaded successfully",
+                "message": "BTS data downloaded and extracted successfully",
                 "s3_key": s3_key,
                 "year": year,
                 "month": month,

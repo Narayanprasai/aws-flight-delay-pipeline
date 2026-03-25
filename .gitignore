@@ -68,3 +68,6 @@ response_noaa.json
 
 # Temporary AWS policy files
 trust-policy.json
+
+#test files
+*.txt
