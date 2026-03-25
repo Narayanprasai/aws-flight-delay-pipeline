@@ -11,7 +11,7 @@ import requests
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-S3_BUCKET = os.environ["RAW_BUCKET"]
+S3_BUCKET = os.environ.get("RAW_BUCKET", "")
 BTS_BASE_URL = "https://transtats.bts.gov/PREZIP"
 
 
@@ -36,7 +36,7 @@ def download_extract_upload(url, filename, year, month):
     response = requests.get(url, timeout=300)
     response.raise_for_status()
 
-    logger.info(f"Downloaded {len(response.content)} bytes — extracting CSV")
+    logger.info(f"Downloaded {len(response.content)} bytes ??extracting CSV")
 
     zip_buffer = io.BytesIO(response.content)
 

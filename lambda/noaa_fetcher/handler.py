@@ -9,7 +9,7 @@ import requests
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-S3_BUCKET = os.environ["RAW_BUCKET"]
+S3_BUCKET = os.environ.get("RAW_BUCKET", "")
 NWS_BASE_URL = "https://api.weather.gov/stations/{station_id}/observations"
 
 AIRPORT_STATIONS = {
@@ -53,7 +53,7 @@ def fetch_station_observations(station_id, start, end):
     response = requests.get(url, headers=HEADERS, params=params, timeout=30)
 
     if response.status_code == 404:
-        logger.warning(f"Station {station_id} not found — skipping")
+        logger.warning(f"Station {station_id} not found ??skipping")
         return []
 
     response.raise_for_status()
