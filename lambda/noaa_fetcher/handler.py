@@ -105,10 +105,11 @@ def handler(event, context):
                 f"/{station_id}_{date_str}.json"
             )
 
+            ndjson_content = "\n".join(json.dumps(record) for record in parsed)
             s3_client.put_object(
                 Bucket=S3_BUCKET,
                 Key=s3_key,
-                Body=json.dumps(parsed, indent=2),
+                Body=ndjson_content,
                 ContentType="application/json",
             )
 

@@ -1,0 +1,35 @@
+{
+  "Name": "weather",
+  "StorageDescriptor": {
+    "Columns": [
+      {"Name": "station_id", "Type": "string"},
+      {"Name": "timestamp", "Type": "string"},
+      {"Name": "temperature_c", "Type": "double"},
+      {"Name": "wind_speed_kmh", "Type": "double"},
+      {"Name": "wind_direction_deg", "Type": "double"},
+      {"Name": "visibility_m", "Type": "double"},
+      {"Name": "present_weather", "Type": "string"},
+      {"Name": "raw_message", "Type": "string"}
+    ],
+    "Location": "s3://flight-pipeline-raw-013849273657/weather/",
+    "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+    "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+    "SerdeInfo": {
+      "SerializationLibrary": "org.openx.data.jsonserde.JsonSerDe",
+      "Parameters": {
+        "serialization.format": "1",
+        "ignore.malformed.json": "true"
+      }
+    },
+    "Compressed": false
+  },
+  "PartitionKeys": [
+    {"Name": "year", "Type": "string"},
+    {"Name": "month", "Type": "string"},
+    {"Name": "day", "Type": "string"}
+  ],
+  "TableType": "EXTERNAL_TABLE",
+  "Parameters": {
+    "classification": "json"
+  }
+}

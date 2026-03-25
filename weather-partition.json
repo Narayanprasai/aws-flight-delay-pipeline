@@ -1,0 +1,15 @@
+{
+  "Values": ["2026", "03", "24"],
+  "StorageDescriptor": {
+    "Location": "s3://flight-pipeline-raw-013849273657/weather/year=2026/month=03/day=24/",
+    "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+    "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+    "SerdeInfo": {
+      "SerializationLibrary": "org.openx.data.jsonserde.JsonSerDe",
+      "Parameters": {
+        "serialization.format": "1",
+        "ignore.malformed.json": "true"
+      }
+    }
+  }
+}

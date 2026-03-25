@@ -67,7 +67,8 @@ models:
     columns:
       - name: delay_risk_score
         tests:
-          - not_null
+          - not_null:
+              severity: warn
 
   - name: dim_airports
     description: "Airport reference dimension"

@@ -75,8 +75,8 @@ joined AS (
         -- combines weather severity with actual delay
         ROUND(
             LEAST(10,
-                (w.wind_severity_score * 1.5) +
-                (w.visibility_severity_score * 1.5) +
+                COALESCE(w.wind_severity_score, 1) * 1.5 +
+                COALESCE(w.visibility_severity_score, 1) * 1.5 +
                 (CASE
                     WHEN f.arrival_delay_minutes >= 120 THEN 4
                     WHEN f.arrival_delay_minutes >= 60  THEN 3

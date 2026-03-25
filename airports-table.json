@@ -1,0 +1,42 @@
+{
+  "Name": "airports",
+  "StorageDescriptor": {
+    "Columns": [
+      {"Name": "id", "Type": "string"},
+      {"Name": "ident", "Type": "string"},
+      {"Name": "type", "Type": "string"},
+      {"Name": "name", "Type": "string"},
+      {"Name": "latitude_deg", "Type": "string"},
+      {"Name": "longitude_deg", "Type": "string"},
+      {"Name": "elevation_ft", "Type": "string"},
+      {"Name": "continent", "Type": "string"},
+      {"Name": "iso_country", "Type": "string"},
+      {"Name": "iso_region", "Type": "string"},
+      {"Name": "municipality", "Type": "string"},
+      {"Name": "scheduled_service", "Type": "string"},
+      {"Name": "gps_code", "Type": "string"},
+      {"Name": "iata_code", "Type": "string"},
+      {"Name": "local_code", "Type": "string"},
+      {"Name": "home_link", "Type": "string"},
+      {"Name": "wikipedia_link", "Type": "string"},
+      {"Name": "keywords", "Type": "string"}
+    ],
+    "Location": "s3://flight-pipeline-static-013849273657/airports/",
+    "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+    "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+    "SerdeInfo": {
+      "SerializationLibrary": "org.apache.hadoop.hive.serde2.OpenCSVSerde",
+      "Parameters": {
+        "separatorChar": ",",
+        "quoteChar": "\""
+      }
+    },
+    "Compressed": false
+  },
+  "PartitionKeys": [],
+  "TableType": "EXTERNAL_TABLE",
+  "Parameters": {
+    "classification": "csv",
+    "skip.header.line.count": "1"
+  }
+}
