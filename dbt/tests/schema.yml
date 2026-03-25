@@ -1,0 +1,78 @@
+version: 2
+
+sources:
+  - name: raw
+    database: awsdatacatalog
+    schema: flight-pipeline_catalog
+    tables:
+      - name: flights
+        description: "Raw BTS on-time performance data"
+        columns:
+          - name: origin
+            tests:
+              - not_null
+          - name: dest
+            tests:
+              - not_null
+          - name: flightdate
+            tests:
+              - not_null
+
+      - name: weather
+        description: "Raw NOAA weather observations"
+        columns:
+          - name: station_id
+            tests:
+              - not_null
+          - name: timestamp
+            tests:
+              - not_null
+
+  - name: static
+    database: awsdatacatalog
+    schema: flight-pipeline_catalog
+    tables:
+      - name: airports
+        description: "Airport reference data from ourairports.com"
+
+models:
+  - name: stg_flights
+    description: "Cleaned and renamed flight delay data"
+    columns:
+      - name: flight_date
+        tests:
+          - not_null
+      - name: carrier_code
+        tests:
+          - not_null
+      - name: origin_airport
+        tests:
+          - not_null
+      - name: destination_airport
+        tests:
+          - not_null
+
+  - name: stg_weather
+    description: "Cleaned weather observations with severity flags"
+    columns:
+      - name: airport_code
+        tests:
+          - not_null
+      - name: observation_date
+        tests:
+          - not_null
+
+  - name: fct_delay_weather
+    description: "Flight delays joined with weather — core analytical table"
+    columns:
+      - name: delay_risk_score
+        tests:
+          - not_null
+
+  - name: dim_airports
+    description: "Airport reference dimension"
+    columns:
+      - name: airport_code
+        tests:
+          - not_null
+          - unique
