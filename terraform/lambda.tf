@@ -1,14 +1,43 @@
-# ── Package Lambda functions as zip files ──
+# ── Install dependencies and package BTS Lambda ──
+resource "null_resource" "bts_dependencies" {
+  triggers = {
+    requirements = filemd5("${path.module}/../lambda/bts_downloader/requirements.txt")
+    handler      = filemd5("${path.module}/../lambda/bts_downloader/handler.py")
+  }
+
+  provisioner "local-exec" {
+    command = "pip install -r ${path.module}/../lambda/bts_downloader/requirements.txt -t ${path.module}/../lambda/bts_downloader/ --quiet"
+  }
+}
+
 data "archive_file" "bts_downloader" {
   type        = "zip"
   source_dir  = "${path.module}/../lambda/bts_downloader"
   output_path = "${path.module}/../lambda/bts_downloader/bts_downloader.zip"
+  excludes    = ["bts_downloader.zip"]
+
+  depends_on = [null_resource.bts_dependencies]
+}
+
+# ── Install dependencies and package NOAA Lambda ──
+resource "null_resource" "noaa_dependencies" {
+  triggers = {
+    requirements = filemd5("${path.module}/../lambda/noaa_fetcher/requirements.txt")
+    handler      = filemd5("${path.module}/../lambda/noaa_fetcher/handler.py")
+  }
+
+  provisioner "local-exec" {
+    command = "pip install -r ${path.module}/../lambda/noaa_fetcher/requirements.txt -t ${path.module}/../lambda/noaa_fetcher/ --quiet"
+  }
 }
 
 data "archive_file" "noaa_fetcher" {
   type        = "zip"
   source_dir  = "${path.module}/../lambda/noaa_fetcher"
   output_path = "${path.module}/../lambda/noaa_fetcher/noaa_fetcher.zip"
+  excludes    = ["noaa_fetcher.zip"]
+
+  depends_on = [null_resource.noaa_dependencies]
 }
 
 # ── BTS Downloader Lambda ──
