@@ -63,11 +63,8 @@ Three charts built in Amazon QuickSight:
 1. **Average arrival delay by carrier** — OH and F9 have highest delays (~23 min), HA lowest (~10 min)
 ![Chart 1](docs/1.png)
 
-2. **Wind speed vs arrival delay scatter** — correlation between weather severity and delays by airport
-![Chart 2](docs/2.png)
-
-3. **Delay risk score by origin airport** — composite score combining weather severity and actual delays
-![Chart 3](docs/3.png)
+2. **Delay risk score by origin airport** — composite score combining weather severity and actual delays
+![Chart 3](docs/2.png)
 
 
 ## Key Findings (March 2025)
